@@ -187,17 +187,17 @@ const [selectDate, setSelectDate] = useState(new Date())
                         </div>
                     </div>
                     <div className="px-2 flex flex-col gap-y-4 h-fit new:px-0 new:visible new:w-full medium:w-full medium:visible medium:px-0 w-3/5 new:flex-col-reverse new:gap-y-2 medium:flex medium:flex-col-reverse">
-                        <div className="py-4 h-fit w-full rounded-lg bg-[#10151c] medium:w-full new:visible gap-y-2">
+                        <div className="py-4 h-fit w-full rounded-lg bg-[#10151c] events medium:w-full new:visible gap-y-2">
                             <EventItems />
-                            <Box className="w-full h-fit flex flex-col gap-y-2 max-h-[280px] overflow-auto scrollbar new:w-full">
+                            <Box className="w-full h-fit flex flex-col gap-y-2 max-h-[280px] overflow-auto scrollbar new:w-full pb-2">
                                 <ScheduleContent allow_register={true} filtered_events={user_events.filter((date) => new Date(date.Event_Start_Data) > new Date())} form_details={forms_got} registration_got={register_got} fetchedOption={fetched_options} fetchedClubs={fetched_clubs}/>
                             </Box>
                         </div>
-                        <Box className="bg-[#10151c] rounded-lg px-0 py-2">
-                            <div className="pt-3 pb-1 bg-[#10151c] px-4 rounded-lg w-full">
+                        <Box className="bg-[#10151c] rounded-lg px-0 py-2 events">
+                            <div className="pt-3 pb-1 px-4 rounded-lg w-full">
                                 Events
                             </div>
-                        <div className="w-full bg-[#10151c] px-0 rounded-lg flex flex-col py-3 new:w-full max-h-[250px] overflow-auto scrollbar">
+                        <div className="w-full px-0 rounded-lg flex flex-col py-3 new:w-full max-h-[250px] overflow-auto scrollbar">
                             {filteredEvents? (
                             <Box className="w-full h-fit new:w-full">
                                 <ScheduleContent filtered_events={filteredEvents} allow_register={true} form_details={forms_got} registration_got={register_got} fetchedOption={fetched_options} fetchedClubs={fetched_clubs}/>
@@ -214,7 +214,7 @@ const [selectDate, setSelectDate] = useState(new Date())
             </Box>
         </div>
         <div className="flex flex-col gap-y-3 w-1/4 medium:w-full">
-                <div className="py-4 h-fit w-full rounded-lg bg-[#10151c] flex flex-col gap-y-4 px-2 new:w-full medium:w-full basic:w-full">
+                <div className="py-4 h-fit w-full rounded-lg bg-[#10151c] events flex flex-col gap-y-4 px-2 new:w-full medium:w-full basic:w-full">
                     <Box className="w-full h-fit text-white">
                         Starred Events
                     </Box>
@@ -222,7 +222,7 @@ const [selectDate, setSelectDate] = useState(new Date())
                         <ScheduleContent allow_register={false}  filtered_events={user_events} form_details={forms_got} registration_got={register_got} fetchedOption={fetched_options} fetchedClubs={fetched_clubs}/>
                     </Box>
                 </div>
-                <div className="py-4 w-full rounded-lg bg-[#10151c] flex flex-col gap-y-3">
+                <div className="py-4 w-full rounded-lg bg-[#10151c] events flex flex-col gap-y-3">
                     <Box className="w-full h-fit rounded-lg bg-[rgba(16,21,26,0.2)] px-5 text-white">
                         Reminders
                     </Box>

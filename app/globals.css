@@ -146,3 +146,7 @@ body {
   background-image: radial-gradient(#6366f1 5%, #1c2735);
   transform: translate(-50%, -50%);
 }
+
+.events {
+  background: radial-gradient(at right bottom, #10161C, #10161C);
+}

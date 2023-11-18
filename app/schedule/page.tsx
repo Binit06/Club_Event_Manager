@@ -28,7 +28,6 @@ const Schedule = async () => {
     
     const {
         data: sessionData,
-        error: sessionError
     } = await supabase.auth.getSession();
     
     const filtered_starred_events = events.filter((event) => {

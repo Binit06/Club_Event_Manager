@@ -108,6 +108,10 @@ const FormModelMemberContent = () => {
     const supabaseClient = useSupabaseClient()
     
     const handleSubmit = async (e: React.FormEvent) => {
+        if(!user){
+            console.log("Please Log In to register")
+            return
+        }
         const selectedOptionsObject: Record<string, string[]> = {};
         const flatDataArray = fieldValues.flatMap((field, index) =>
             Object.entries(field).map(([componentId, value]) => ({
