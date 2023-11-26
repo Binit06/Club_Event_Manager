@@ -88,7 +88,7 @@ const CalenderComponent: React.FC<CalenderComponentProps> = ({
                                 onClick={() => {handleDateClick(date); onclick(date)}}
                             >
                                 <h1
-                                    className={`h-10 w-10 rounded-full grid place-content-center hover:bg-indigo-500 hover:text-white transition-all cursor-pointer select-none ${current_month ? "": "text-neutral-600"} ${today? "bg-red-600 text-white": ""} ${selectDate.toDateString() === date.toDateString() ? "bg-indigo-500 text-white": ""}`}
+                                    className={`h-10 w-10 rounded-full grid place-content-center hover:bg-indigo-500 hover:text-white transition-all cursor-pointer select-none ${current_month ? "text-white": "text-neutral-600"} ${today? "bg-red-600 text-white": ""} ${selectDate.toDateString() === date.toDateString() ? "bg-indigo-500 text-white": ""}`}
                                     onClick={() => {setSelectDate(date); onclick(date)}}
                                 >
                                     {date.getDate()}

@@ -34,7 +34,7 @@ const FaQ = () => {
 
     return(
         <div className="w-full h-fit py-9 flex flex-col gap-y-4 px-8">
-            <div className="w-full flex justify-center text-3xl relative title_new py-3">
+            <div className="w-full flex justify-center text-3xl relative title_new py-3 text-white">
                 We're Here to Help
             </div>
             <div className="bg-black px-4 flex flex-col gap-y-4 mt-2">
