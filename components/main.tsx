@@ -164,7 +164,7 @@ export default function TypeWriterComponent() {
       }}
     />
     </div>
-      <div className="container msg flex flex-col gap-y-2">
+      <div className="container msg flex flex-col gap-y-2 select-none">
         <h1 className='font-normal text-6xl new:text-4xl'>Clubify for&nbsp;<span className="txt-type text-[#FF5722]" data-wait="2000" data-words='["Developers", "Secretaries", "Participants"]'></span></h1>
         <h2 className='text-[2rem] new:text-[1rem]'>Welcome to Club Event Manager</h2>
         <p className="welcome-msg text-gray-400 text-lg">

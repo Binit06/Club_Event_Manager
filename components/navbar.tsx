@@ -121,7 +121,7 @@ const Navbar: React.FC<NavBarProps> = ({
             )}          
         </div>
         <div className="w-full flex justify-center">
-            <main className={`w-full flex-1 overflow-x-auto bg-black ${pathnames === "/" ? "border" : "px-3"}`}>
+            <main className={`w-full flex-1 overflow-x-auto bg-black ${pathnames === "/" ? "" : "px-3"}`}>
                 {children}
             </main>
         </div>
