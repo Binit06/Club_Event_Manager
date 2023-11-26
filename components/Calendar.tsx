@@ -82,8 +82,8 @@ const Calender: React.FC<CalenderProps> = ({
     const [yearnew, setYearnew] = useState(new Date().getFullYear())
     const [selectDate, setSelectDate] = useState(new Date())
   return(
-    <div className="w-full h-fit flex flex-row gap-x-2">
-        <div className="w-[30%] h-full">
+    <div className="w-full h-fit flex flex-row gap-x-2 new:flex new:flex-col medium:flex-col medium:gap-y-2">
+        <div className="w-[30%] h-full new:w-full medium:w-full">
             <CalenderComponent 
                 onclick={(date) => handleClickMain(date)}
                 months_new={month.toString()}
@@ -98,7 +98,7 @@ const Calender: React.FC<CalenderProps> = ({
                 </Box>
             </div>
             <Box className="bg-[#10151c] rounded-lg px-0 py-2">
-                <div className="pt-3 pb-1 bg-[#10151c] px-4 rounded-lg w-full">
+                <div className="pt-3 pb-1 bg-[#10151c] px-4 rounded-lg w-full text-white">
                     Events
                 </div>
             <div className="w-full bg-[#10151c] px-0 rounded-lg flex flex-col py-3 new:w-full max-h-[250px] overflow-auto scrollbar">
