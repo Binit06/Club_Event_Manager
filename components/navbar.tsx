@@ -14,6 +14,8 @@ import ProfileContent from "./ProfileContent";
 import EventAddAuthentication from "@/hooks/EventAddAuthentication";
 import { FaUserCircle } from "react-icons/fa";
 import useEventModel from "@/hooks/useEventAddModel";
+import ProfileProvider from "@/providers/ProfileProvider";
+import useProfileModel from "@/hooks/useProfileModel";
 
 export let AuthenticationToken: string | null = null
 
@@ -58,7 +60,7 @@ const Navbar: React.FC<NavBarProps> = ({
         AuthenticationToken = clubAccessValue
         console.log(clubAccess !== null)
     }
-    
+    const profileModel = useProfileModel()
     return(
         <>
         <div>
@@ -70,13 +72,13 @@ const Navbar: React.FC<NavBarProps> = ({
                 />
             ))}
         </div>
-        <div className="flex flex-row h-fit items-center medium:pr-0 new:pr-0">
+        <div className={`flex flex-row h-fit items-center medium:pr-0 new:pr-0 ${pathnames === "/" ? "fixed w-3/4 left-1/2 translate-x-[-50%] z-10" : "w-full" } transition-all`}>
             <Box className="w-full">
                 <div className="w-full h-20 flex items-center px-1">
-                    <nav className="bg-gray-800 flex w-full text-white rounded-2xl backdrop-blur-1xl h-16 items-center justify-end pr-6 bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-50 new:pr-0 relative overflow-hidden">
+                    <nav className={`bg-gray-800 flex w-full text-white rounded-2xl backdrop-blur-1xl h-16 items-center justify-end pr-6 bg-clip-padding backdrop-filter backdrop-blur-sm ${pathnames !== "/" ? "bg-opacity-50": "bg-opacity-75"}  new:pr-0 relative overflow-hidden transition-all`}>
                         {users.length !== 0 ? (
                             <>
-                            <div className="absolute left-0 w-36 new:w-14 medium:w-20">
+                            <div className="absolute left-0 w-36 new:w-14 medium:w-20 flex flex-row">
                                 {users.map((item) => (
                                     <ProfileContent 
                                     key={item.id}
@@ -84,6 +86,9 @@ const Navbar: React.FC<NavBarProps> = ({
                                     data={item}
                                     />
                                 ) )}
+                                <div className="absolute border left-0">
+                                    <ProfileProvider/>
+                                </div>
                             </div>
                             </>
                         ): user? (
@@ -116,7 +121,7 @@ const Navbar: React.FC<NavBarProps> = ({
             )}          
         </div>
         <div className="w-full flex justify-center">
-            <main className="w-full flex-1 overflow-x-auto px-3">
+            <main className={`w-full flex-1 overflow-x-auto bg-black ${pathnames === "/" ? "border" : "px-3"}`}>
                 {children}
             </main>
         </div>

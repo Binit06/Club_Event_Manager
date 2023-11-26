@@ -17,7 +17,8 @@ const config: Config = {
       screens: {
         'new': {'max': '407px'},
         'medium': {'max': '1246px'},
-        'basic': {'max': '776px'}
+        'basic': {'max': '776px'},
+        'newwidth': {'max': '768px'}
       }
     },
   },

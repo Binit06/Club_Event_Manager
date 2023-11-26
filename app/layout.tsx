@@ -10,6 +10,7 @@ import Loading from '@/components/Loading'
 import getEvents from '@/actions/getEvents'
 import getUserById from '@/actions/getUserByUserId'
 import getFormElements from '@/actions/getFormElements'
+import Script from 'next/script';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -29,7 +30,10 @@ export default async function RootLayout({
   console.log(formDetails)
   console.log(userSong)
   return (
-    <html lang="en">
+    <html lang="en" className='bg-black'>
+      <head>
+        <Script src="http://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></Script>
+      </head>
       <body className={inter.className + " scrollbar background"}>
         <SupabaseProvider>
           <UserProvider>
@@ -39,6 +43,8 @@ export default async function RootLayout({
             </Navbar>
           </UserProvider>
         </SupabaseProvider>
+        {/* <Script src="assets/vendor/particles.min.js" strategy='beforeInteractive'/>
+        <Script src="/assets/js/particle.js" /> */}
       </body>
     </html>
   )

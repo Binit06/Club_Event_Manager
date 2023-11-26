@@ -157,7 +157,7 @@ const EventsBox: React.FC<EventProps> = ({
     const fileData = useLoadFileData(AttachedFile);
     return(
         <>
-        <div className={`w-full h-20 rounded-xl p-3 flex flex-row items-center transition-all cursor-pointer ${isSelected? "border border-indigo-500 shadow-indigo-500 shadow-sm": "border-neutral-500 shadow-black shadow-sm shadow-outline border-t-black border-1 hover:shadow-lg hover:shadow-black"} mainClass `} onClick={handleSingleClick}>
+        <div className={`w-full h-20 rounded-xl p-3 flex flex-row items-center transition-all cursor-pointer ${isSelected? "border border-indigo-500 shadow-indigo-500 shadow-sm": "border-neutral-500 shadow-black shadow-sm shadow-outline border-t-black border-1 hover:shadow-md hover:shadow-indigo-500"} mainClass `} onClick={handleSingleClick}>
             <div className={`w-fit h-full items-center ${isSelected? "flex": "hidden"} checkbox_class`}>
             <Form.Check
                 type="checkbox"

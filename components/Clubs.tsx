@@ -1,8 +1,10 @@
 import Image from "next/image";
 import React from "react";
+import Particles from "react-tsparticles"
+import { loadFull } from "tsparticles"
 
 interface ClubProps {
-    ClubImage?: string;
+    ClubImage: string;
     ClubName: string;
     ClubFullName?: string;
     ClubDescription: string;
@@ -27,12 +29,12 @@ const Clubs: React.FC<ClubProps> = ({
                         </div>
                     </div>
                     <div className="w-[200px] h-[200px] max-w-[300px] max-h-[300px] rounded-full border-8 border-white absolute bottom-[-20px] right-[5px] bg-cover bg-black">
-                        <Image src={ClubImage || "/images/oss.svg"} alt="" className="grayscale-0 z-10 club_image" />
+                        <Image src={ClubImage} alt="" className="grayscale-0 z-10 club_image" fill/>
                     </div>
                 </div>
-                <div className="card-back-1">
-                    <div className="flex h-fit justify-center">
-                        <Image src={ClubImage || "/images/oss.svg"} alt="" className="w-[140px] py-3 club_image" />
+                <div className="card-back-1 flex flex-col justify-center items-center py-2">
+                    <div className="card-back-image">
+                        <Image src={ClubImage} alt="" className="w-[50px] py-3 club_image" fill/>
                     </div>
                     <div className="flex flex-col gap-y-2">
                         <h3 className="text-lg font-sans">{ClubFullName}</h3>

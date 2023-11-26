@@ -3,11 +3,11 @@ import { useState } from "react";
 import DatePicker from "react-tailwindcss-datepicker";
 import Input from "./Input";
 import Button from "./Button";
-import FormComponent from "./FormComponent";
 import { useUser } from "@/hooks/useUser";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import uniqid from "uniqid";
 import { FiCircle } from "react-icons/fi";
+import { useRouter } from "next/navigation";
 
 interface FieldValue {
     [key: string]: string | File | null| any;
@@ -23,7 +23,7 @@ const FormModelMemberContent = () => {
         ? formodalforload.eventData.filter((item) => item.formId === formodalforload.eventId)
         : [];
 
-    const initialFieldValues: FieldValue[] = (formodalforload.eventData || []).reduce((acc: FieldValue[], component) => {
+    const initialFieldValues: FieldValue[] = (filteredItems || []).reduce((acc: FieldValue[], component) => {
         if (component.componentType === "date") {
             acc.push({ [component.componentId]: null });
         } else {
@@ -36,47 +36,65 @@ const FormModelMemberContent = () => {
 
     const optionItemsCaptured = formodalforload.componentOptions
     const [fieldValues, setFieldValues] = useState<FieldValue[]>(initialFieldValues);
-    const [clickedOptions, setClickedOptions] = useState(Array(optionItemsCaptured?.length).fill(false));
+    const [clickedOptions, setClickedOptions] = useState<Array<{component: string, selected: boolean[]}>>([]);
     const [selectedOptions, setSelectedOptions] = useState<Array<{ componentId: string, optionValue: string }>>([]);
 
 
     //Handling ChekBox Change
-    const handleClicked = (index: any, id:string, optVal:string) => {
-        const newClickedOptions = [...clickedOptions];
-        const limit_length = optionItemsCaptured?.filter(final => final.componentId === id)?.[(optionItemsCaptured.filter(obj => obj.componentId === id).length - 1)]?.limitValue;
-        const limit_counter = newClickedOptions.filter(x => x === true).length;
-    
-        if(limit_length !== undefined && limit_counter < parseInt(limit_length)) {
-            newClickedOptions[index] = !newClickedOptions[index];
-            setClickedOptions(newClickedOptions);
-    
-            if(newClickedOptions[index]){
-                // Add the selected option to the state
-                setSelectedOptions(prevOptions => [
-                    ...prevOptions,
-                    { componentId: id, optionValue: optVal }
-                ]);
-            } else {
-                // Remove the deselected option from the state
-                setSelectedOptions(prevOptions => 
-                    prevOptions.filter(option => !(option.componentId === id && option.optionValue === optVal))
-                );
+    const handleClicked = (index: number, option_index: number, id: string, optVal: string) => {
+        const TotalOptions = optionItemsCaptured?.filter((option) => option.componentId === id).length || 0;
+        const limitLength = optionItemsCaptured?.filter((final) => final.componentId === id)?.[optionItemsCaptured.filter((obj) => obj.componentId === id).length - 1]?.limitValue ;
+        let limitcounter = clickedOptions.filter(option => option.component === id).reduce((acc, {selected}) => acc + selected.filter((value) => value).length, 0)        
+        console.log("This is the original limit counter" + limitcounter)
+        console.log("The limit length for this component is" + limitLength)
+        console.log(index)
+        if(index === -1){
+            const initialOptions = Array(TotalOptions).fill(false).map((value, index) => index === option_index)
+            console.log(initialOptions)
+            setClickedOptions(prevOption => [
+                ...prevOption,
+                {component: id, selected:initialOptions}
+            ])
+            setSelectedOptions(prevOption => [
+                ...prevOption,
+                {componentId:id, optionValue:optVal}
+            ])
+            limitcounter += 1
+        } else {
+            const updateClickedOption = [...clickedOptions]
+            const newClicked = updateClickedOption[index].selected
+            if(limitLength !== undefined && limitcounter < parseInt(limitLength)){
+                if(newClicked[option_index] === false){
+                    setSelectedOptions(prevOption => [
+                        ...prevOption,
+                        {componentId: id, optionValue: optVal}
+                    ])
+                    limitcounter += limitcounter
+                } else {
+                    setSelectedOptions((prevOptions) => 
+                        prevOptions.filter((options) => !(options.componentId === id && options.optionValue === optVal))
+                    )
+                    limitcounter -= 1
+                }
+                newClicked[option_index] = !newClicked[option_index]
+            } else{
+                if(limitLength !== undefined && parseInt(limitLength) === limitcounter){
+                    newClicked[option_index] = false
+                    setSelectedOptions((prevOptions) => 
+                        prevOptions.filter((options) => !(options.componentId === id && options.optionValue === optVal))
+                    )
+                    limitcounter -= 1
+                }
             }
-        } else if(limit_length !== undefined && limit_counter === parseInt(limit_length)) {
-            newClickedOptions[index] = false;
-            setClickedOptions(newClickedOptions);
-    
-            // Remove the deselected option from the state
-            setSelectedOptions(prevOptions => 
-                prevOptions.filter(option => !(option.componentId === id && option.optionValue === optVal))
-            );
+            setClickedOptions(updateClickedOption)
+            console.log("First Addtion Succesful")
         }
+        console.log(clickedOptions[index])
+        console.log("The limit counter has reached" + limitcounter)
+    }
     
-        console.log(selectedOptions);
-    };
     
-    
-
+    const router = useRouter()
     const handleInputChange = (componentId: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
         setFieldValues((prevValues) =>
             prevValues.map((field) =>
@@ -188,6 +206,21 @@ const FormModelMemberContent = () => {
 
             console.log(flatDataArray)
             console.log(updatedFlatDataArray)
+
+            const RequiredComponentIds: string[] = []
+            formodalforload.eventData?.forEach((item) => {
+                if(item.required){
+                    RequiredComponentIds.push(item.componentId)
+                }
+            })
+            
+            const requiredandvaluescomponentIds = updatedDataArray.filter((item) => {
+                if(RequiredComponentIds?.includes(item.componentId) && item.value.length > 0){
+                    return true
+                } else {
+                    throw new Error("Required Vield Values are missing")
+                }
+            })
     
             // Insert registration data
             const { data, error } = await supabaseClient
@@ -230,6 +263,8 @@ const FormModelMemberContent = () => {
         } catch (error) {
             console.log("Error inserting data : ", error);
         }
+
+        router.refresh()
     };
     
     
@@ -241,7 +276,15 @@ const FormModelMemberContent = () => {
                     <div className="flex flex-col gap-y-4">
                         {filteredItems.map((component) => (
                             <div key={component.componentId} className="flex flex-col gap-y-1 rounded-md">
-                                <div>{component.componentName}</div>
+                                {component.componentType === "Description" ? (
+                                    <div className="text-lg bg-[#383434] py-4 px-2 rounded-lg">{component.componentName}</div>
+                                ): (
+                                    component.required?(
+                                        <div className="flex flex-row w-fit gap-x-2"><p>{component.componentName}</p> <p className="text-red-400 text-xl">*</p></div>
+                                    ):(
+                                        <div>{component.componentName}</div>
+                                    )
+                                )}
                                 {component.componentType === "date" ? (
                                     <DatePicker
                                         value={date}
@@ -263,6 +306,7 @@ const FormModelMemberContent = () => {
                                         placeholder={`Enter ${component.componentName}`}
                                         className="text-lg"
                                         onChange={handleInputChange(component.componentId)}
+                                        required={component.required}
                                     />
                                 ) : (
                                     <div></div>
@@ -272,24 +316,28 @@ const FormModelMemberContent = () => {
                                         type="file"
                                         placeholder={`Attach ${component.componentName}`}
                                         onChange={handleFileChange(component.componentId)}
+                                        required={component.required}
                                     />
                                 ) : (
                                     <div></div>
                                 )}
                                 {component.componentType === "options" ? (
                                     <div className="flex flex-col gap-y-2 bg-neutral-700 px-3 rounded-lg relative">
-                                        {optionItemsCaptured?.filter((items) => items.componentId === component.componentId).map((items, index) => (
-                                            <div key={items.optionId} className="flex flex-row items-center gap-x-3">
-                                                <button type="button" onClick={() => handleClicked(index, component.componentId, items.optionValue)}>
-                                                    <FiCircle size={20} className={`transition-all ${clickedOptions[index] ? 'text-green-500' : 'text-gray-500'}`} />
-                                                </button>
-                                                <div className="py-4">
-                                                    {items.optionValue}
+                                        {optionItemsCaptured?.filter((items) => items.componentId === component.componentId).map((items, index, main_index) => {
+                                            const componentIndex = clickedOptions.findIndex((items) => items.component === component.componentId)
+                                            return (
+                                                <div key={items.optionId} className="flex flex-row items-center gap-x-3">
+                                                    <button type="button" onClick={() => handleClicked(componentIndex, index, component.componentId, items.optionValue)}>
+                                                        <FiCircle size={20} className={`transition-all ${clickedOptions[componentIndex]?.selected[index] || false ? 'text-green-500' : 'text-gray-500'}`} />
+                                                    </button>
+                                                    <div className="py-4">
+                                                        {items.optionValue}
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        ))}
+                                            );
+                                        })}
                                         <div className="absolute right-1 bottom-1 flex flex-row items-center gap-x-2 bg-neutral-800 rounded-md px-2 opacity-50 cursor-default select-none">
-                                            Selection Limit <p className="w-fit p-1">{optionItemsCaptured?.filter(final => final.componentId === component.componentId)?.[(optionItemsCaptured.filter(obj => obj.componentId === component.componentId).length - 1)].limitValue}</p>
+                                            Selection Limit <p className="w-fit p-1">{optionItemsCaptured?.filter(final => final.componentId === component.componentId)?.[(optionItemsCaptured.filter(obj => obj.componentId === component.componentId).length - 1)]?.limitValue}</p>
                                         </div>
                                     </div>
                                 ):(
