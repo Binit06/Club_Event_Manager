@@ -1,6 +1,5 @@
 "use client";
 
-import AttachementViewer from "@/components/AttachementViewer";
 import AuthModel from "@/components/AuthModel";
 import EventModel from "@/components/EventAddModel";
 import EventUpdateModel from "@/components/EventUpdateModel";
