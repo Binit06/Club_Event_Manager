@@ -8,29 +8,6 @@ export default async function Home() {
       <TypeWriterComponent />
       <AboutUs />
       <FaQ />
-      <div>
-      <div className="footer flex flex-row">
-          <div>
-            <div className="wave">
-              <h2 className="line_title">Amphibits</h2>
-              <p>To inspire and empower individuals to become proficient in coding through collaborative learning and innovative resources.</p>
-            </div>
-          </div>
-          <div>
-            <div className="wave">
-              <h2 className="line_title">Contact Us</h2>
-              <p>Amphibits</p>
-            </div>
-          </div>
-          <div>
-            <div className="wave">
-            <h2 className="line_title">FeedBack</h2>
-            <button>Feedback</button>
-            </div>
-
-          </div>
-      </div>
-      </div>
     </div>
   )
 }
