@@ -106,6 +106,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ formsfetched, fetchedRegisters })
             <th className='border p-2 font-semibold text-lg truncate'>Registry User Code</th>
             {formsfetched
               .filter((items) => items.formId === search)
+              .filter((component) => component.componentType !== "Description")
               .map((data) => (
                 <th key={data.formId} className='border p-2 font-semibold text-lg truncate' style={{ maxWidth: '150px' }}>
                   {data.componentName}
@@ -116,11 +117,11 @@ const SearchBar: React.FC<SearchBarProps> = ({ formsfetched, fetchedRegisters })
         <tbody>
           {uniqueUserIds.map((item, index) => (
             <tr key={index}>
-              <td className={`border overflow-hidden whitespace-nowrap text-center ${exportPDF ? "py-2": ""}`} title='Registry Email Value'>
+              <td className={`border overflow-hidden whitespace-nowrap text-center py-2 flex justify-center ${exportPDF ? "py-2": ""}`} title='Registry Email Value'>
                 <span className='hover:underline cursor-pointer'>{item}</span>
               </td>
               {user && filteredRegisters.filter((userid) => userid.user_id === item).map((data) => (
-                <td key={data.component_id} className='border overflow-hidden max-w-2xl whitespace-nowrap'>
+                <td key={data.component_id} className='border overflow-hidden max-w-2xl whitespace-nowrap text-center'>
                   {data.component_value}
                 </td>
               ))}

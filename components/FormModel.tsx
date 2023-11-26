@@ -7,6 +7,7 @@ import Button from "./Button";
 import useEventModel from "@/hooks/useEventAddModel";
 import useFormModel from "@/hooks/useFormModel";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { useRouter } from "next/navigation";
 
 interface FormModelProps {
   children?: React.ReactNode;
@@ -17,6 +18,7 @@ interface FormComponent {
   name: string;
   type: string;
   inputType: string;
+  val: boolean;
 }
 
 interface OptionComponent {
@@ -41,7 +43,7 @@ const FormModel: React.FC<FormModelProps> = ({ children }) => {
     const uniqueID = uniqid();
     setFormComponents((prevComponents) => [
       ...prevComponents,
-      { id: uniqueID, name: "Enter your Question", type: "text", inputType: "text" }
+      { id: uniqueID, name: "Enter your Question", type: "text", inputType: "text", val: false }
     ]);
   };
 
@@ -98,6 +100,18 @@ const FormModel: React.FC<FormModelProps> = ({ children }) => {
       )
     );
   };
+  const router = useRouter()
+
+  const handleRequiredChanges = (id: string) => {
+    setFormComponents((prevComponent) => 
+      prevComponent.map((component) => 
+        component.id === id ? {
+          ...component,
+          val: !component.val
+        } : component
+      )
+    )
+  }
 
   const getDefaultInputType = (type: string): string => {
     switch (type) {
@@ -124,7 +138,7 @@ const FormModel: React.FC<FormModelProps> = ({ children }) => {
                 componentName: component.name,
                 componentType: component.type,
                 componentInputType: component.inputType,
-                componentValue: "",
+                required: component.val,
         }));
         const optionData = optionComponents.map((options) => ({
             optionId: options.option_id,
@@ -156,6 +170,7 @@ const FormModel: React.FC<FormModelProps> = ({ children }) => {
           }
         }
         setOptionComponents([])
+        router.refresh()
         formModel.onClose()
     } catch (error) {
         console.error("Something went very wrong")
@@ -180,6 +195,7 @@ const FormModel: React.FC<FormModelProps> = ({ children }) => {
                   type={component.type}
                   inputType={component.inputType}
                   onDelete={() => handleDeleteComponent(component.id)}
+                  onRequired={() => handleRequiredChanges(component.id)}
                   onInputChange={(name) => handleInputChange(component.id, name)}
                   onSelectChange={(type) => handleSelectChange(component.id, type)}
                   viewMode={viewMode}

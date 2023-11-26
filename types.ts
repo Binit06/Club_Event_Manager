@@ -33,7 +33,7 @@ export interface Forms {
     componentName: string;
     componentType: string;
     componentInputType: string;
-    componentValue: string;
+    required: boolean;
     created_at: string;
 }
 

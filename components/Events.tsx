@@ -157,7 +157,7 @@ const EventsBox: React.FC<EventProps> = ({
     const fileData = useLoadFileData(AttachedFile);
     return(
         <>
-        <div className={`w-full h-20 border rounded-xl p-3 flex flex-row items-center transition-all cursor-pointer ${isSelected? "border border-indigo-500 shadow-indigo-500 shadow-sm": "border-neutral-500 hover:shadow-indigo-500 hover:shadow-sm"} mainClass`} onClick={handleSingleClick}>
+        <div className={`w-full h-20 rounded-xl p-3 flex flex-row items-center transition-all cursor-pointer ${isSelected? "border border-indigo-500 shadow-indigo-500 shadow-sm": "border-neutral-500 shadow-black shadow-sm shadow-outline border-t-black border-1 hover:shadow-md hover:shadow-indigo-500"} mainClass `} onClick={handleSingleClick}>
             <div className={`w-fit h-full items-center ${isSelected? "flex": "hidden"} checkbox_class`}>
             <Form.Check
                 type="checkbox"
@@ -166,8 +166,8 @@ const EventsBox: React.FC<EventProps> = ({
                 className="custom-checkbox"
             />
             </div>
-            <div className={`medium:w-36 new:w-5/12 w-2/12 basic:2/12 h-full rounded-xl mr-3 relative ${className} select-none`}>
-                <Image className="object-fit grayscale hover:grayscale-0 transition scale-75" fill src={useLoadImageData(data) || "/images/Spark.svg"} alt=""/>
+            <div className={`medium:w-36 new:w-5/12 w-2/12 basic:2/12 h-full rounded-md mr-3 relative ${className} select-none overflow-hidden`}>
+                <Image className="object-fit grayscale hover:grayscale-0 transition scale-75 aspect-square" fill src={useLoadImageData(data) || "/images/Spark.svg"} alt=""/>
             </div>
             <div className="w-full h-20 flex flex-col justify-center gap-y-2 mr-2 overflow-hidden relative">
                 <div className="text-neutral-300 flex flex-row items-center absolute top-[12px] truncate gap-x-2">

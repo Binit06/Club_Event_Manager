@@ -11,6 +11,7 @@ import uniqid from "uniqid"
 
 interface FormContentProps {
     onDelete: () => void;
+    onRequired: () => void;
     viewMode: boolean;
     id: string;
     name: string;
@@ -24,7 +25,7 @@ interface FormContentProps {
   }
   
 
-const FormContent: React.FC<FormContentProps> = ({ onDelete, viewMode, id, name, type, inputType, onSelectChange, onInputChange, onOptionAddition, onOptionChange, onLimitChange}) => {
+const FormContent: React.FC<FormContentProps> = ({ onDelete, viewMode, id, name, type, inputType, onSelectChange, onInputChange, onOptionAddition, onOptionChange, onLimitChange, onRequired}) => {
     const [date, setDate] = useState({
         startDate: null,
         endDate: null
@@ -96,6 +97,11 @@ const FormContent: React.FC<FormContentProps> = ({ onDelete, viewMode, id, name,
         setQuestion(value);
         onInputChange(value)
     };
+    const [required, setIsRequired] = useState(false)
+    const handleRequiredChange = () => {
+        setIsRequired(!required)
+        onRequired()
+    }
     return(
         <div className={`flex flex-col gap-y-1 rounded-md ${viewMode? "px-0 mb-0" : "bg-neutral-700 px-2 mb-4"}`}>
             <div className="flex flex-row justify-between pt-0 items-center">
@@ -103,6 +109,9 @@ const FormContent: React.FC<FormContentProps> = ({ onDelete, viewMode, id, name,
                     {question}
                 </div>
                 <div className="flex flex-row gap-x-2 items-center">
+                    <button onClick={handleRequiredChange} className={`${viewMode? "hidden": "visible"} ${required? "bg-red-400": "bg-transparent"} text-sm px-2 rounded-lg`} type="button">
+                        Required
+                    </button>
                     <button onClick={onDelete} className={`${viewMode? "hidden": "visible"}`}>
                         <MdDelete size={20} className="text-white"/>
                     </button>
@@ -112,6 +121,7 @@ const FormContent: React.FC<FormContentProps> = ({ onDelete, viewMode, id, name,
                             <option value={"options"}>Options</option>
                             <option value={"date"}>Date</option>
                             <option value={"attachement"}>Attachement</option>
+                            <option value={"Description"}>Description</option>
                         </Select>
                     </div>
                 </div>
