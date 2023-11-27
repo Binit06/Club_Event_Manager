@@ -24,7 +24,7 @@ const CalenderComponent: React.FC<CalenderComponentProps> = ({
     }
     return(
         <div className="w-full h-fit bg-[#10151c] p-4 rounded-lg">
-            <div className="flex justify-between items-center px-4">
+            <div className="flex justify-between items-center px-4 text-white">
                 <h1 className="select-none font-semibold">
                     {months[month]}, {yearnew}
                 </h1>
