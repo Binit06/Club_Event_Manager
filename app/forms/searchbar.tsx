@@ -1,7 +1,17 @@
-"use client"
+"use client";
 
-
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
+import { Input } from '../../components/ui/input';
+import { Button } from "../../components/ui/button"
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { Forms, Registration } from '@/types';
 import { useSearchParams } from 'next/navigation';
 import { useUser } from '@/hooks/useUser';
@@ -9,130 +19,141 @@ import * as XLSX from 'xlsx';
 import html2canvas from 'html2canvas';
 import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
-import { Content, DynamicBackground, TDocumentDefinitions } from 'pdfmake/interfaces';
-
-
-
+import type { Content, DynamicBackground } from 'pdfmake/interfaces';
+import './dark-mode.css';
 
 interface SearchBarProps {
   formsfetched: Forms[];
   fetchedRegisters: Registration[];
 }
 
-
 const SearchBar: React.FC<SearchBarProps> = ({ formsfetched, fetchedRegisters }) => {
-
   const searchParams = useSearchParams();
   const search = searchParams.get('id');
-
-
   const { user } = useUser();
+  const [searchQuery, setSearchQuery] = useState<string | null>('');
+  const [loadingPDF, setLoadingPDF] = useState(false);
+  const [exportPDF, setExportPDF] = useState(false);
 
-
-  console.log(search);
-  const exportToExcel = () => {
-    const table = document.getElementById('your-table-id');
-  
-    if (!table) {
-      console.error('Table element not found');
-      return;
-    }
-  
-    const wb = XLSX.utils.table_to_book(table);
-    // const blob = XLSX.write(wb, { bookType: 'xlsx', mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', type: 'blob' });
-    XLSX.writeFile(wb, 'table_data.xlsx');
-  
-    const link = document.createElement('a') as HTMLAnchorElement;
-    // link.href = URL.createObjectURL(blob as any);
-    link.download = 'table_data.xlsx';
-    link.click();
-  };
-
-  const [exportPDF, setExportPDF] = useState(false)
   pdfMake.vfs = pdfFonts.pdfMake.vfs;
-  const handleExport = () => {
-    setExportPDF(true)
-    const table = document.getElementById('your-table-id');
 
-    if (table) {
-      html2canvas(table).then((canvas) => {
-        const data = canvas.toDataURL();
-        const docDefinition = {
-          content: [{
-            image: data,
-            width: 500
-          }],
-          defaultStyle: {
-            color: '#000' // Set text color to black
-          },
-          background: {
-            color: '#000'
-          } as Content | DynamicBackground
-        };
-        pdfMake.createPdf(docDefinition).download('customer-details.pdf');
-      });
-      setExportPDF(false)
-    } else {
-      console.error("Table element not found");
-      setExportPDF(false)
-    }
+  const filteredRegisters = useMemo(() => {
+    const formsFetchedComponentIds = formsfetched
+      .filter((items) => items.formId === search)
+      .map((data) => data.componentId);
+
+    return fetchedRegisters
+      .filter((items) => formsFetchedComponentIds.includes(items.component_id))
+      .filter((items) => items.component_value !== '');
+  }, [formsfetched, fetchedRegisters, search]);
+
+  const uniqueUserIds = useMemo(() => {
+    return Array.from(new Set(filteredRegisters.map((data) => data.user_id)));
+  }, [filteredRegisters]);
+
+  const filteredUserIds = useMemo(() => {
+    return uniqueUserIds.filter((userId) => userId.toLowerCase().includes(searchQuery === null ? ''.toLowerCase() : searchQuery.toLowerCase()));
+  }, [uniqueUserIds, searchQuery]);
+
+  const columns = useMemo(() => {
+    const formColumns = formsfetched
+      .filter((items) => items.formId === search)
+      .filter((component) => component.componentType !== 'Description')
+      .map((data) => ({
+        title: data.componentName,
+        dataIndex: data.componentId,
+        key: data.componentId,
+      }));
+
+    return [
+      {
+        title: 'Registry User Code',
+        dataIndex: 'user_id',
+        key: 'user_id',
+      },
+      ...formColumns,
+    ];
+  }, [formsfetched, search]);
+
+  const dataSource = useMemo(() => {
+    return filteredUserIds.map((userId) => {
+      const record: any = { user_id: userId };
+
+      filteredRegisters
+        .filter((recordItem) => recordItem.user_id === userId)
+        .forEach((item) => {
+          record[item.component_id] = item.component_value;
+          console.log(item);
+        });
+
+      return record;
+    });
+  }, [filteredUserIds, filteredRegisters]);
+
+  const exportToExcel = () => {
+    const ws = XLSX.utils.json_to_sheet(dataSource);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    XLSX.writeFile(wb, 'table_data.xlsx');
   };
-  
-  const formsFetchedComponentIds = formsfetched
-    .filter((items) => items.formId === search)
-    .map((data) => data.componentId);
 
-  const filteredRegisters = fetchedRegisters
-    .filter((items) => formsFetchedComponentIds.includes(items.component_id))
-    .filter((items) => items.component_value !== '');
-  
-    const uniqueUserIds = Array.from(new Set(filteredRegisters.map((data) => data.user_id)));
-    console.log(uniqueUserIds)
+  const handleExportPDF = () => {
+    setLoadingPDF(true);
+    html2canvas(document.querySelector('.ant-table') as HTMLElement).then((canvas) => {
+      const data = canvas.toDataURL();
+      const docDefinition = {
+        content: [{ image: data, width: 500 }],
+        defaultStyle: { color: '#000' },
+        background: { color: '#fff' } as Content | DynamicBackground,
+      };
+      pdfMake.createPdf(docDefinition).download('customer-details.pdf');
+      setLoadingPDF(false);
+    });
+  };
 
   return (
-    <div>
-      {uniqueUserIds.length === 0 ? (
-        <div className='text-neutral-500'>
-          No Responses Found
+    <div className='p-4 dark-mode'>
+      <div className='flex items-center justify-between mb-4'>
+        <div className='text-sm text-neutral-600 px-5'>
+            List Of Responses
         </div>
-      ):(
-        <div></div>
+        <div className='space-x-4'>
+          <Button onClick={exportToExcel} variant="secondary">
+            Export to Excel
+          </Button>
+        </div>
+      </div>
+
+      {filteredUserIds.length === 0 ? (
+        <div className='text-neutral-500'>No Responses Found</div>
+      ) : (
+        <Table>
+          <TableCaption>A list of user responses.</TableCaption>
+          <TableHeader>
+            <TableRow className='hover:bg-black'>
+              {columns.map(column => (
+                <TableHead key={column.key} className={column.key === 'user_id' ? 'w-[150px]' : ''}>
+                  {column.title}
+                </TableHead>
+              ))}
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {dataSource.map((data) => (
+              <TableRow key={data.user_id} className='hover:bg-neutral-700 hover:cursor-pointer'>
+                {columns.map((column) => (
+                  <TableCell key={column.key} className={column.key === 'user_id' ? 'font-medium' : ''}>
+                    {data[column.dataIndex] || ''}
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
       )}
-      <button onClick={exportToExcel}>Export to Excel</button>
-      <button onClick={handleExport} className='ml-12'>Export to PDF</button>
-      <table className={`border-collapse w-full ${exportPDF? "text-black": ""}`} id='your-table-id'>
-        <thead>
-          <tr className='border-b'>
-            <th className='border p-2 font-semibold text-lg truncate'>Registry User Code</th>
-            {formsfetched
-              .filter((items) => items.formId === search)
-              .filter((component) => component.componentType !== "Description")
-              .map((data) => (
-                <th key={data.formId} className='border p-2 font-semibold text-lg truncate' style={{ maxWidth: '150px' }}>
-                  {data.componentName}
-                </th>
-              ))}
-          </tr>
-        </thead>
-        <tbody>
-          {uniqueUserIds.map((item, index) => (
-            <tr key={index}>
-              <td className={`border overflow-hidden whitespace-nowrap text-center py-2 flex justify-center ${exportPDF ? "py-2": ""}`} title='Registry Email Value'>
-                <span className='hover:underline cursor-pointer'>{item}</span>
-              </td>
-              {user && filteredRegisters.filter((userid) => userid.user_id === item).map((data) => (
-                <td key={data.component_id} className='border overflow-hidden max-w-2xl whitespace-nowrap text-center'>
-                  {data.component_value}
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
     </div>
   );
 };
 
-
-
 export default SearchBar;
+

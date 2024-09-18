@@ -27,8 +27,6 @@ const ScheduleContent: React.FC<ScheduleComponentProps> =({
             </div>
         )
     }
-    console.log("This is the length received in Schedule Components" + fetchedOption.length)
-    console.log("This is the length received in Schedule Components for FormData" + form_details.length)
     return(
         <div>
             <div className="flex flex-col gap-y-2">

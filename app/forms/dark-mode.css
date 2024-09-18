@@ -1,0 +1,42 @@
+/* dark-mode.css */
+.dark-mode {
+  background-color: #1e1e1e; /* Dark background color */
+  color: #e0e0e0; /* Light text color */
+}
+
+.dark-mode .ant-table {
+  background-color: #1e1e1e;
+  color: #e0e0e0;
+}
+
+.dark-mode .ant-table-thead > tr > th {
+  background-color: #333;
+  color: #e0e0e0;
+}
+.dark-mode .ant-table-cell-row-hover {
+    background-color: #616161 !important;
+    cursor: pointer;
+}
+
+.dark-mode .ant-table-tbody > tr > td {
+  background-color: #2c2c2c;
+  color: #e0e0e0;
+}
+
+.dark-mode .ant-btn {
+  background-color: #333;
+  border-color: #444;
+  color: #e0e0e0;
+}
+
+.dark-mode .ant-btn:hover {
+  background-color: #616161;
+  border-color: #555;
+}
+
+.dark-mode .ant-input {
+  background-color: #333;
+  color: #e0e0e0;
+  border-color: #444;
+}
+

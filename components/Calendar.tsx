@@ -18,13 +18,15 @@ interface CalenderProps {
   register_got: Registration[];
   fetched_options: Options[];
   fetched_clubs: Clubs[]
+  fetched_starred_events: Events[];
 }
 const Calender: React.FC<CalenderProps> = ({
   user_events,
   forms_got,
   register_got,
   fetched_options,
-  fetched_clubs
+  fetched_clubs,
+  fetched_starred_events
 }) => {
   console.log(fetched_options.length)
   const [datselectDate, setdatSelectDate] = useState({
@@ -35,9 +37,7 @@ const Calender: React.FC<CalenderProps> = ({
   const handleOnClick = (values: any) => {
     setMonth(new Date(values?.startDate).getMonth())
     setYearnew(new Date(values?.startDate).getFullYear())
-    console.log("Started")
     let SelectedDate = new Date(values?.startDate);
-    console.log(SelectedDate)
     setdatSelectDate(values)
     const adjustedDate = SelectedDate;
     const SelectedEvents = user_events.filter((items) => {
@@ -53,28 +53,21 @@ const Calender: React.FC<CalenderProps> = ({
     });
     setFilteredEvents(SelectedEvents);
     filteredEvents = SelectedEvents;
-    console.log(filteredEvents);
-    console.log(filteredEvents === null);
-    console.log("Event Added")
   }
 
   const handleClickMain = (value: any) => {
     setdatSelectDate({startDate: null, endDate:null})
-    console.log("Entered into Date Section")
     const selectedDate = value
-    console.log(selectedDate)
     const SelectedEvents = user_events.filter((items) => {
         if(items.Event_Start_Data === items.Event_End_Data && selectedDate.toDateString() === new Date(items.Event_Start_Data).toDateString()){
             console.log(selectedDate.toDateString())
             console.log(new Date(items.Event_Start_Data).toDateString())
-            console.log("Entered into the correct sequence")
             return true
         }
         const startCheck = selectedDate && new Date(items.Event_Start_Data).setHours(0, 0, 0) <= selectedDate;
         const EndCheck = selectedDate && new Date(items.Event_End_Data).setHours(0, 0, 0) >= selectedDate;
         return selectedDate && startCheck && EndCheck;
     })
-    console.log(SelectedEvents)
     setFilteredEvents(SelectedEvents);
     filteredEvents = SelectedEvents
   }
@@ -120,7 +113,7 @@ const Calender: React.FC<CalenderProps> = ({
                     Starred Events
                 </Box>
                 <Box className="w-full h-fit rounded-lg bg-[rgba(16,21,26,0.2)] text-neutral-400 flex flex-col gap-y-2 max-h-[280px] overflow-auto scrollbar py-1">
-                    <ScheduleContent allow_register={false}  filtered_events={user_events} form_details={forms_got} registration_got={register_got} fetchedOption={fetched_options} fetchedClubs={fetched_clubs}/>
+                    <ScheduleContent allow_register={false}  filtered_events={fetched_starred_events} form_details={forms_got} registration_got={register_got} fetchedOption={fetched_options} fetchedClubs={fetched_clubs}/>
                 </Box>
             </div>
             <div className="py-4 w-full rounded-lg bg-[#10151c] flex flex-col gap-y-3">

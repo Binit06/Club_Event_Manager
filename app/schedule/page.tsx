@@ -9,6 +9,8 @@ import getClubsElement from "@/actions/getClubs";
 import getStarredElements from "@/actions/getStarredEvents";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers"
+import { Events } from "@/types";
+import getEventsById from "@/actions/getEventsById";
 
 export const revalidate = 0
 
@@ -19,29 +21,15 @@ const Schedule = async () => {
     const options = await getOptionElements()
     const clubs = await getClubsElement()
     const starredEvents = await getStarredElements()
-    console.log("Forms:", forms);
-    console.log("The length received in Page.tsx" + options.length)
-
-    const supabase = createServerComponentClient({
-        cookies: cookies
+    const starred : Events[] = [];
+    starredEvents.map(async (value) => {
+        const data = await getEventsById(value.id.toString());
+        starred.push(data[0])
+        console.log(data)
     })
-    
-    const {
-        data: sessionData,
-    } = await supabase.auth.getSession();
-    
-    const filtered_starred_events = events.filter((event) => {
-        const starred_Events = starredEvents.find(
-            (starredEvents) => 
-                starredEvents.event_id === event.event_id &&
-                starredEvents.user_id === sessionData.session?.user.id
-        );
-        return starred_Events !== undefined
-    })
-    console.log(filtered_starred_events)
     return(
         <div>
-            <Calender user_events={events} forms_got={forms} register_got={registers} fetched_options={options} fetched_clubs={clubs}/>
+            <Calender user_events={events} forms_got={forms} register_got={registers} fetched_options={[]} fetched_clubs={[]} fetched_starred_events={starred}/>
         </div>
     )
 }

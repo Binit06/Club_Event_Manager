@@ -8,7 +8,7 @@ import getRegistrations from '@/actions/getRegistration'
 // When the value is available during React hydration the fallback
 // will be replaced with the `<SearchBar>` component.
 function SearchBarFallback() {
-  return <>placeholder</>
+  return <>Loading Data</>
 }
  
 export default async function Page() {
