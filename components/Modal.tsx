@@ -31,6 +31,7 @@ const Modal: React.FC<ModalProps> = ({
                     backdrop-blur-sm
                     fixed
                     inset-0
+                    text-white
                     "
                     />
                     <Dialog.Content
@@ -56,6 +57,7 @@ const Modal: React.FC<ModalProps> = ({
                         focus:outline-none
                         overflow-auto
                         scrollbar
+                        text-white
                         "
                     >
                         <Dialog.Title

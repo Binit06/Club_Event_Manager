@@ -25,7 +25,7 @@ const CalenderComponent: React.FC<CalenderComponentProps> = ({
     return(
         <div className="w-full h-fit bg-[#10151c] p-4 rounded-lg">
             <div className="flex justify-between items-center px-4">
-                <h1 className="select-none font-semibold">
+                <h1 className="select-none font-semibold text-white">
                     {months[month]}, {yearnew}
                 </h1>
                 <div className="flex gap-10 items-center ">
@@ -41,7 +41,7 @@ const CalenderComponent: React.FC<CalenderComponentProps> = ({
                         }}
                     />
                     <h1
-                        className="cursor-pointer hover:scale-105 transition-all select-none"
+                        className="cursor-pointer hover:scale-105 transition-all select-none text-white"
                         onClick={() => {
                             setSelectDate(new Date())
                             setMonth(new Date().getMonth())
@@ -53,7 +53,7 @@ const CalenderComponent: React.FC<CalenderComponentProps> = ({
                         Today
                     </h1>
                     <RxCaretRight
-                        className="w-5 h-5 cursor-pointer hover:scale-105 transition-all"
+                        className="w-5 h-5 cursor-pointer hover:scale-105 transition-all text-white"
                         onClick={() => {
                             if(month === 11){
                                 setMonth(0)

@@ -25,7 +25,7 @@ const Clubs: React.FC<ClubProps> = ({
                             {ClubName}
                         </div>
                         <div className="px-6 h-[125px] text-overflow-clamp text-white">
-                            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Consequatur perspiciatis explicabo, quas impedit beatae debitis repudiandae minus culpa necessitatibus nobis. Cumque eveniet at corporis quos maxime dolores sed voluptas amet!
+                        Discover, collaborate, and grow through exciting student-led initiatives. Join a vibrant community and explore your passion beyond the classroom.
                         </div>
                     </div>
                     <div className="w-[200px] h-[200px] max-w-[300px] max-h-[300px] rounded-full border-8 border-white absolute bottom-[-20px] right-[5px] bg-cover bg-black">

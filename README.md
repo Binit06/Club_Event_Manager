@@ -1,36 +1,55 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Clubify
 
-## Getting Started
+**Clubify** is a club management platform that provides an all-in-one solution for managing college clubs, organizing events, sending reminders, and enhancing student engagement. It is designed to simplify administration and make student club experiences more interactive and organized.
 
-First, run the development server:
+## 🚀 Features
+
+- 🔐 User Authentication (Admin & Student roles)
+- 📅 Event Scheduling and Calendar Integration
+- 🔔 Smart Event Reminders
+- 📊 Dashboard for Admins
+- 🧑‍💻 Browse Clubs and Join Events
+- 📁 Responsive UI with React and Tailwind CSS
+
+## 🧪 Admin Access (Trial)
+
+To explore the admin dashboard and features without registering, you can log in with the following **trial credentials**:
+
+Email: trial_user@gmail.com
+Password: admin
+
+
+> ⚠️ This account has full admin privileges. Use it to access all features such as creating clubs, managing members, sending reminders, and more.
+
+## 🛠️ Tech Stack
+
+- **Frontend:** React, Tailwind CSS, TypeScript
+- **Backend:** Supabase
+- **Authentication:** Supabase Auth
+- **Icons & Styling:** React Icons, ShadCN
+
+## 📦 Installation
+
+1. **Clone the Repository**
+
+```bash
+git clone https://github.com/Binit06/Club_Event_Manager.git
+cd clubify
+
+```
+
+2. **Install Dependencies**
+
+```bash
+npm install
+```
+
+3. **Start the Development Server**
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+4. **Screenshots**
+![alt text](image.png)
+![alt text](image-1.png)
