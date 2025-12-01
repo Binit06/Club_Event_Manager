@@ -33,7 +33,7 @@ Password: admin
 1. **Clone the Repository**
 
 ```bash
-git clone https://github.com/Binit06/Club_Event_Manager.git
+git clone https://github.com/Binit06/Clubify.git
 cd clubify
 
 ```
